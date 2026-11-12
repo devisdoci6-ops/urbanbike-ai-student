@@ -4,7 +4,7 @@ Studenti: Devis Doci
 Grupi (nëse punohet në grup): Individual
 Data: 2026-11-13
 GitHub-i im: https://github.com/devisdoci6-ops/urbanbike-ai-student
-Figma:
+Figma: https://www.figma.com/design/CRlitxgYBno7v2wAqIkN7k/UrbanBike-AI-%E2%80%93-Dashboard?node-id=0-1
 
 ## Qëllimi
 

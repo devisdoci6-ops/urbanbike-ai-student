@@ -156,18 +156,18 @@ body{{
 
   <div class="stats-row">
     <div class="stat-card">
-      <div class="label">Parashikimi</div>
-      <div class="value primary">{result['prediction']:.0f}</div>
+      <div class="label">Qiratë e parashikuara</div>
+      <div class="value primary">{result['prediction']:.2f}</div>
       <div class="unit">qira / ditë</div>
     </div>
     <div class="stat-card">
-      <div class="label">Vlera Reale</div>
+      <div class="label">Vlera reale</div>
       <div class="value success">{result['actual']}</div>
       <div class="unit">qira / ditë</div>
     </div>
     <div class="stat-card">
-      <div class="label">Gabimi Absolut</div>
-      <div class="value warning">{result['absolute_error']:.0f}</div>
+      <div class="label">Gabimi absolut</div>
+      <div class="value warning">{result['absolute_error']:.2f}</div>
       <div class="unit">{error_pct:.1f}% gabim</div>
     </div>
   </div>
@@ -211,8 +211,8 @@ body{{
   </div>
 
   <div class="footer">
-    <p>UrbanBike AI · Polis University · Kursi i Inteligjencës Artificiale</p>
-    <p style="margin-top:4px">Moti përdor lag7. Numërimet e djeshme supozohen të njohura.</p>
+    <p>UrbanBike AI · Projekt grupi: Devis Doci, Linor Beqiri, Ergi Kazazi</p>
+    <p style="margin-top:4px">Moti përdor lag7. Numërimet e djeshme supozohen të njohura. Ky demonstrim nuk verifikon parashikim të drejtpërdrejtë për sot.</p>
   </div>
 </div>
 </body>

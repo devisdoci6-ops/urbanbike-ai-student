@@ -1,12 +1,14 @@
 # Raporti i studentit: UrbanBike AI
 
-Studenti: Devis Doci
-Grupi (nëse punohet në grup): Individual
+Studenti: Devis Doci, Linor Beqiri, Ergi Kazazi
+Grupi (nëse punohet në grup): Devis Doci, Linor Beqiri, Ergi Kazazi
 Data: 2026-11-13
 GitHub-i im: https://github.com/devisdoci6-ops/urbanbike-ai-student
 Figma: https://www.figma.com/design/CRlitxgYBno7v2wAqIkN7k/UrbanBike-AI-%E2%80%93-Dashboard?node-id=0-1
 
 ## Qëllimi
+
+Si grup, ne ndërtuam një aplikacion të thjeshtë me inteligjencë artificiale që parashikon kërkesën ditore për biçikleta me qira nga të dhëna reale historike të qirave dhe të motit. Kaluam të gjithë procesin: pastrimin e të dhënave, grafikët, modelet me Scikit-learn me ndarje train/validation/test, krahasimin e modeleve, klasifikimin, konceptin në Figma, kodin në VS Code dhe publikimin në GitHub.
 
 Problemi që zgjidhim: Sa qira biçikletash priten për ditën pasuese në Washington, D.C.?
 Target-i y: `rentals` (numri total i qirave ditore, kolona `cnt` në UCI).
@@ -15,10 +17,10 @@ Koha kur parashikojmë dhe çfarë informacioni është i njohur: Parashikojmë 
 
 ## Pastrimi
 
-Burimet reale dhe çelësi i bashkimit: UCI Bike Sharing (`data/raw/day.csv`, 731 ditë, 2011–2012) dhe NASA POWER (`data/raw/nasa_weather.csv`: `temp_c`, `rain_mm`, `wind_ms`). U bashkuan me çelësin `date`, një-me-një, dhe dhanë 731 rreshta.
+Burimet reale dhe çelësi i bashkimit: Ne përdorëm UCI Bike Sharing (`data/raw/day.csv`, 731 ditë, 2011–2012) dhe NASA POWER (`data/raw/nasa_weather.csv`: `temp_c`, `rain_mm`, `wind_ms`). I bashkuam me çelësin `date`, një-me-një, dhe morëm 731 rreshta.
 Dallimi mes origjinaleve dhe kopjes didaktike: Skedarët në `data/raw/` nuk u ndryshuan (UCI ka 731 rreshta dhe 0 mungesa). Gabimet u krijuan me kod vetëm në kopjen ushtrimore `data/teaching/dirty.csv`, që pastrimi të demonstrohet në mënyrë të kontrolluar.
 Rreshtat para/pas: Kopja didaktike kishte 743 rreshta. Pas pastrimit mbetën 731 rreshta. Pas krijimit të lag-eve mbetën 724 rreshta për modelim.
-Dublimet: U gjetën dhe u hoqën 12 rreshta identikë.
+Dublimet: Gjetëm dhe hoqëm 12 rreshta identikë.
 Mungesat para/pas konvertimit: Para konvertimit kishte 30 qeliza bosh. Kolona `temp_c` ishte tekst (`object`) sepse përmbante 6 vlera tekstuale "gabim". Pas konvertimit në numër, këto u bënë NaN, pra gjithsej 36 mungesa meteorologjike. `date` u kthye në datetime dhe `temp_c` në float64. Të dhënat u renditën sipas datës.
 Arsyeja e imputimit vetëm me train: Mungesat plotësohen me medianë brenda Pipeline-it, dhe mediana mësohet vetëm nga train. Kështu validation dhe testi nuk ndikojnë në trajnim (shmangim rrjedhjen e informacionit). Mungesa nuk trajtohet si 0 °C, sepse kjo do të ishte një vlerë e rreme.
 
@@ -38,7 +40,7 @@ Pse një lidhje e dukshme nuk provon shkakësi: Temperatura dhe qiratë rriten n
 | RandomForest | 1821.528 | 1671.499 | 2042.654 | -0.087 |
 
 Ndarja kohore: Train 2011-01-08 – 2012-04-30 (479 ditë), Validation 2012-05-01 – 2012-08-31 (123), Test 2012-09-01 – 2012-12-31 (122).
-Modeli i zgjedhur nga validation dhe arsyeja: Ridge, sepse ka MAE-në më të ulët në validation (687.558) mes dy kandidatëve ML. Zgjedhja u bë para se të shiheshin rezultatet e testit. Në test, Ridge mbetet më i miri (MAE 893.251, R² 0.591) dhe e kalon pak baseline-in Yesterday (916.402).
+Modeli i zgjedhur nga validation dhe arsyeja: Ne zgjodhëm Ridge, sepse ka MAE-në më të ulët në validation (687.558) mes dy kandidatëve ML. Zgjedhja u bë para se të shiheshin rezultatet e testit. Në test, Ridge mbetet më i miri (MAE 893.251, R² 0.591) dhe e kalon pak baseline-in Yesterday (916.402).
 Rezultati i provës me Random Forest: Random Forest doli më keq në validation (MAE 1821.528) dhe në test (MAE 1671.499, R² −0.087). Një shpjegim i mundshëm është se pemët nuk mund të parashikojnë vlera më të larta se ato që kanë parë në train, ndërsa kërkesa në 2012 ishte më e lartë. Kjo tregon se një model më kompleks nuk është automatikisht më i mirë.
 Interpretimi i gabimit në qira për ditë: Me Ridge, parashikimi gabon mesatarisht rreth 893 qira në ditë në periudhën e testit. RMSE (1252.655) është më i madh se MAE, gjë që tregon disa ditë me gabime të mëdha. Shembull nga aplikacioni: për 2012-09-01 parashikimi është 6834.73 qira, vlera reale 6140, gabimi absolut 694.73.
 Rezultati i klasifikimit, nëse u realizua: Po. Pragu (mediana e train-it) është 3907 qira, dhe "kërkesë e lartë" do të thotë rentals ≥ 3907. Në test ka 103 ditë të larta dhe 19 normale. DummyMostFrequent ka accuracy 84.43%, por balanced accuracy 50.00% dhe macro-F1 0.458, sepse nuk dallon asnjë ditë normale. LogisticRegression ka accuracy 91.80%, balanced accuracy 77.98% dhe macro-F1 0.820, me matricë konfuzioni [[11, 8], [2, 101]]: 8 ditë normale u klasifikuan si të larta dhe 2 ditë të larta si normale. Accuracy vetëm është mashtruese kur klasat janë të pabalancuara.
@@ -53,9 +55,11 @@ Rezultati i klasifikimit, nëse u realizua: Po. Pragu (mediana e train-it) ësht
 
 | Studenti | Skedari/ekrani | Puna dhe vendimi | Commit/prova |
 |---|---|---|---|
-| Devis Doci | Figma: UrbanBike AI – Devis Doci | Koncepti i ndërfaqes 1440×900 me fushën e datës, butonin Parashiko dhe hapësirën e rezultatit | Lidhja Figma në këtë raport |
-| Devis Doci | `config/common.py`, `01_clean.py`, `02_visualize.py`, `03_train.py`, `04_classify.py`, `run_all.py` | Ndërtimi dhe ekzekutimi i pipeline-it; kontrolli i rezultateve kundrejt slajdeve; interpretimi i grafikëve dhe i zgjedhjes së Ridge | `reports/` dhe commit-i në GitHub |
-| Devis Doci | `app.py` | Aplikacioni lokal me modelin Ridge, me stil vizual sipas konceptit Figma (logjika e parashikimit e pandryshuar) | Prova për 2012-09-01: 6834.73 / 6140 / 694.73 |
+| Devis Doci | `.gitignore`, `requirements.txt`, `config/common.py`, `01_clean.py`, `app.py`, `run_all.py` | Përgatiti Git-in dhe mjedisin `.venv`; ndërtoi pastrimin (12 dublime, 36 mungesa, tipet) dhe vendosi që imputimi të mësohet vetëm nga train; ndërtoi aplikacionin lokal me etiketat e konceptit Figma dhe e publikoi projektin në GitHub | `reports/data_quality.json`; prova e aplikacionit për 2012-09-01: 6834.73 / 6140 / 694.73 |
+| Linor Beqiri | `02_visualize.py`, Figma | Krijoi tre grafikët vetëm nga periudha train dhe shkroi vëzhgimet; projektoi konceptin e ndërfaqes 1440×900 me fushën e datës, butonin Parashiko dhe hapësirën e rezultatit | `reports/figures/01–03`; lidhja Figma në këtë raport |
+| Ergi Kazazi | `03_train.py`, `04_classify.py` | Trajnoi dhe krahasoi Yesterday, DummyMean, Ridge dhe RandomForest; zgjodhi Ridge sipas MAE në validation; realizoi klasifikimin normale/e lartë dhe interpretoi pse accuracy vetëm është mashtruese | `reports/regression_metrics.csv`, `reports/classification_metrics.json` |
+
+Të tre e kontrolluam projektin së bashku kundrejt udhëzimeve të lëndës dhe e shkruam raportin si grup.
 
 ## Burimet
 

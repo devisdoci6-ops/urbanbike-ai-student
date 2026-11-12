@@ -1,9 +1,11 @@
 # Raporti i studentit: UrbanBike AI
 
-Studenti: Devis Doci, Linor Beqiri, Ergi Kazazi
 Grupi: Devis Doci, Linor Beqiri, Ergi Kazazi
+
 Data: 2026-11-11
+
 GitHub-i im: https://github.com/devisdoci6-ops/urbanbike-ai-student
+
 Figma: https://www.figma.com/design/CRlitxgYBno7v2wAqIkN7k/UrbanBike-AI-%E2%80%93-Dashboard?node-id=0-1
 
 ## Qëllimi
